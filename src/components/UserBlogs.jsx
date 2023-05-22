@@ -6,10 +6,10 @@ const UserBlogs = () => {
   const [blogs, setBlogs] = useState()
   const id = localStorage.getItem("userId");
   const SendRequest = async () => {
-    const res = await axios
-      .get(`http://localhost:5002/blogs/editor/${id}`)
-      .catch(err => console.log(err));
-    const data = await res.data;
+    const rees = await axios
+      .get(`http://localhost:5002/api/blogs/editor/${id}`)
+      .catch((err) => console.log(err));
+    const data = await rees.data;
     return data;
   }
   useEffect(() => {

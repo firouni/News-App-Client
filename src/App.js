@@ -6,6 +6,8 @@ import WriteBlogs from "./components/Write/WriteBlogs";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
+import SubHeader from "./components/SubHeader";
+import Footer from "./components/Footer";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -13,6 +15,7 @@ function App() {
   return (
     <div className="App">
       <Header />
+      <SubHeader/>
 
       <Routes>
         <Route path="/auth" element={<Login />} />
@@ -20,6 +23,8 @@ function App() {
         <Route path="/myblogs" element={<UserBlogs />} />
         <Route path="/editorial" element={<WriteBlogs />} />
       </Routes>
+
+      <Footer/>
     </div>
   );
 }

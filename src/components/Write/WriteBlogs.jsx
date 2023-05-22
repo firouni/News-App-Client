@@ -3,16 +3,21 @@ import "./WriteBlogs.scss";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
+import moment from "moment";
+import { useLocation } from "react-router-dom";
 
 const WriteBlogs = () => {
+    const state = useLocation().state;
     const [value, setValue] = useState("");
         console.log(value, "value");
     const [title, setTitle] = useState("");
+        console.log(title, "title");
     const [cover, setCover] = useState(null);
     const [cat, setCat] = useState("");
+        console.log(cat, "category");
 
     const newRequest = async (value) => {
-        const alpha = await axios.post("http://localhost:5002/blogs/add", {...value})
+        const alpha = await axios.post("http://localhost:5002/api/blogs/add", {...value})
         const data = await alpha.data
         return data
     }
@@ -32,11 +37,31 @@ const WriteBlogs = () => {
         console.log('inputs', value);
         newRequest().then((data) => console.log(data));
     };
-    const handleChange = (e) => {
+    const handleChange = async (e) => {
         setValue((preStat) => ({
             ...preStat,
             [e.target.name]: e.target.value,
-        }))
+        }));
+        const imgURL = await upload();
+        try {
+            state
+                ? await axios
+                    .put(`/posts/${state.id}`, {
+                        title,
+                        desc: value,
+                        cat,
+                        img: cover ? imgURL : ""
+                    })
+                : await axios.post("/posts", {
+                    title,
+                    desc: value,
+                    cat,
+                    img: cover ? imgURL : "",
+                    date: moment(Date.now()).format("DD-MM-YYYY HH:mm:ss")
+                });
+        } catch (err) {
+            console.log(err)
+        }
     };
 
     return (
@@ -98,7 +123,7 @@ const WriteBlogs = () => {
                 <div className="cat">
                     <input
                     type="radio"
-                    checked={cat === "art"}
+                    checked={cat === "Politics"}
                     name="cat"
                     value="politics"
                     id="politics"

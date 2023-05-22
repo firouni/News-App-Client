@@ -66,7 +66,7 @@ const Form = () => {
 
   const register = async (values, onSubmitProps) => {
     const savedUser = await axios.post(
-      "http://localhost:5002/users/register",
+      "http://localhost:5002/api/users/register",
       {...values}
     );
     onSubmitProps.resetForm();
@@ -77,7 +77,7 @@ const Form = () => {
 
   const login = async (values, onSubmitProps) => {
     const loggedIn = await axios.post(
-      "http://localhost:5002/users/login",
+      "http://localhost:5002/api/users/login",
       {...values}
     );
     onSubmitProps.resetForm();
