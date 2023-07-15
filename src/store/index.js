@@ -1,6 +1,13 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+    admin:[{
+        id: 1,
+        name: "firas",
+        email: "firas@test.com",
+        password: "azertyazerty",
+        role:"admin"
+    }],
     isLoggedIn: false,
     mode: "light",
     user: null,
@@ -9,12 +16,12 @@ const initialState = {
     posts: [],
 };
 const authSlice = createSlice({
-    name: "auth",
+    name: "authuser",
     initialState,
     reducers: {
-        setMode: (state) => {
+        /*setMode: (state) => {
             state.mode = state.mode === "light" ? "dark" : "light";
-        },
+        },*/
         setLogin: (state, action) => {
             state.isLoggedIn = true;
             state.user = action.payload.user;

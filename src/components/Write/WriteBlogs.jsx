@@ -7,6 +7,28 @@ import moment from "moment";
 import { useLocation } from "react-router-dom";
 
 const WriteBlogs = () => {
+    const [inputs, setInputs] = useState({
+        title: "",
+        description: "",
+        cover: "",
+    });
+    const sendRequest = async () => {
+        const res = await axios.post("http://localhost:5002/api/blogs/add", {
+            title: inputs.title,
+            description: inputs.description,
+            cover: inputs.cover,
+            user: localStorage.getItem("userID")
+        }).catch(err => console.log(err));
+        const data = await res.data
+        return data;
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log(inputs);
+        sendRequest().then()
+    }
+
+
     const state = useLocation().state;
     const [value, setValue] = useState("");
         console.log(value, "value");
@@ -38,7 +60,7 @@ const WriteBlogs = () => {
         newRequest().then((data) => console.log(data));
     };
     const handleChange = async (e) => {
-        setValue((preStat) => ({
+        setInputs((preStat) => ({
             ...preStat,
             [e.target.name]: e.target.value,
         }));
@@ -48,15 +70,15 @@ const WriteBlogs = () => {
                 ? await axios
                     .put(`/posts/${state.id}`, {
                         title,
-                        desc: value,
+                        description: value,
                         cat,
-                        img: cover ? imgURL : ""
+                        cover: cover ? imgURL : ""
                     })
                 : await axios.post("/posts", {
                     title,
-                    desc: value,
+                    description: value,
                     cat,
-                    img: cover ? imgURL : "",
+                    cover: cover ? imgURL : "",
                     date: moment(Date.now()).format("DD-MM-YYYY HH:mm:ss")
                 });
         } catch (err) {
@@ -65,7 +87,7 @@ const WriteBlogs = () => {
     };
 
     return (
-        <div className="lay">
+        <div className="lay" onSubmit={handleSubmit}>
             <div className="add">
             <div className="content">
                 <input
@@ -97,14 +119,14 @@ const WriteBlogs = () => {
                     type="file"
                     name=""
                     id="file"
-                    onChange={(e) => setCover(e.target.value)}
+                    onChange={(e) => setCover(e.target.files[0])}
                 />
                 <label className="file" htmlFor="file">
                     Upload Image
                 </label>
                 <div className="buttons">
                     <button onClick={handleAdd}>Save as a Draft</button>
-                    <button onClick={handleChange}>Publish</button>
+                    <button type="submit" onClick={handleChange}>Publish</button>
                 </div>
                 </div>
                 <div className="item">

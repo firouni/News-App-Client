@@ -1,8 +1,22 @@
-import React from "react";
+/*import React, { useEffect, useState } from "react";
 import "./Menu.scss";
+import axios from "axios";
 import posts from "../../PostsData";
 
-const Menu = (posts) => {
+const Menu = ({ cat, posts }) => {
+    const [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const res = await axios.get(`/posts/?cat=${cat}`);
+          setPosts(res.data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      fetchData();
+    }, [cat]);
   return (
     <div className="menu">
       <h1>Other posts</h1>
@@ -17,4 +31,4 @@ const Menu = (posts) => {
   )
 }
 
-export default Menu
+export default Menu*/

@@ -8,12 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Blog = ({ title, description, cover, isUser, id, userName, update }) => {
+    console.log(title, isUser)
     const navigate = useNavigate();
     const handleEdit = (e) => {
         navigate("/editorial")
     }
 
-    const deleteRequest = async () => {
+    const deleteRequest = async (req, props) => {
+        const { id } =
+            props && props.match && props.match.params && props.match.params;
         const res = await axios
             .delete(`http://localhost:5002/api/blogs/dltBlog/${id}`)
             .catch((err) => console.log(err));
@@ -48,12 +51,16 @@ const Blog = ({ title, description, cover, isUser, id, userName, update }) => {
                 title={userName}
                 subheader={update}
             />
-            <Button variant="contained" startIcon={<EditIcon />}>
-                Edit
-            </Button>
-            <Button variant="outlined" endIcon={<DeleteIcon />}>
-                Delete
-            </Button>
+            {isUser && (
+                <>
+                <Button variant="contained" startIcon={<EditIcon />}>
+                    Edit
+                </Button>
+                <Button variant="outlined" endIcon={<DeleteIcon />}>
+                    Delete
+                </Button>
+                </>
+            )}
 
             {isUser && (
                 <Box display="flex">
@@ -72,7 +79,7 @@ const Blog = ({ title, description, cover, isUser, id, userName, update }) => {
                 {title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                {description}
+                        <b>{ userName }</b> {':'} {description}
                 </Typography>
             </CardContent>
             <CardActions>

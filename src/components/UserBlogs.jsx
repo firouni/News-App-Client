@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Blog from './Blog';
+import { useParams } from 'react-router-dom';
 
 const UserBlogs = () => {
-  const [blogs, setBlogs] = useState()
-  const id = localStorage.getItem("userId");
+  const [user, setUser] = useState();
+  const [blogs, setBlogs] = useState({});
+  const { _id } = useParams();
+  const id = localStorage.getItem({_id});
+  //const { _id } = useParams();
+    console.log(id,'verId');
   const SendRequest = async () => {
-    const rees = await axios
-      .get(`http://localhost:5002/api/blogs/editor/${id}`)
+    const res = await axios
+      .get(`http://localhost:5002/api/blogs/editor/${blogs._id}`)
       .catch((err) => console.log(err));
-    const data = await rees.data;
+    const data = await res.data;
+    console.log('data',data)
     return data;
   }
   useEffect(() => {
-    SendRequest().then((data) => setBlogs(data.blogs.blogs))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); console.log(blogs);
+    SendRequest().then((data) => setUser(data.user))
+  }, []); console.log(user);
   return (
-    <>
-      {blogs &&
-        blogs.map((blog, index) => (
+    <div>
+      {" "}
+      {user && user.blogs &&
+        user.blogs.map((blog, index) => (
           <Blog
             key={index}
             id={blog._id}
@@ -30,8 +36,8 @@ const UserBlogs = () => {
             userName={blog.user.pseudo}
           />
         ))}
-    </>
+    </div>
   );
 }
 
-export default UserBlogs
+export default UserBlogs;

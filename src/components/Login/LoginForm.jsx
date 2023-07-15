@@ -14,7 +14,6 @@ import {
   TextField,Typography,
   useMediaQuery,
 } from "@mui/material";
-//import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 //register schema
 const registerSchema = yup.object().shape({
@@ -76,19 +75,21 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedIn = await axios.post(
-      "http://localhost:5002/api/users/login",
-      {...values}
-    );
+    const loggedIn = await axios
+      .post("http://localhost:5002/api/users/login", {...values})
+      .catch(err => console.log(err))
     onSubmitProps.resetForm();
+    //how to setitem in localstorage?
     if (loggedIn) {
-      dispatch(
+      loggedIn()
+        .then((data) => localStorage.setItem("userId", data.User._id))
+        .then(() => dispatch(
           authActions.setLogin({
-              user: loggedIn.user,
-              token: loggedIn.token,
+            user: loggedIn.user,
+            token: loggedIn.token,
           })
-      );
-      navigate("/blogs");
+        ))
+        .then(() => navigate("/blogs"))
     }
   };
 

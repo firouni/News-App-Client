@@ -33,4 +33,4 @@ const SubHeader = ({userName}) => {
     );
 }
 
-export default SubHeader
+export default SubHeader;
